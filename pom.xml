@@ -70,18 +70,32 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<!-- API de persistência para interação com entidades JPA -->
+		<!-- Biblioteca para validação de dados -->
 		<dependency>
 			<groupId>jakarta.persistence</groupId>
 			<artifactId>jakarta.persistence-api</artifactId>
 			<version>3.1.0</version>
 		</dependency>
 
-		<!-- API de transação para gerenciar transações no contexto JPA -->
+		<!-- Biblioteca para transações -->
 		<dependency>
 			<groupId>jakarta.transaction</groupId>
 			<artifactId>jakarta.transaction-api</artifactId>
 			<version>2.0.1</version>
+		</dependency>
+
+		<!-- Biblioteca para documentação de APIs com Swagger -->
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.6.0</version>
+		</dependency>
+
+		<!-- Swagger Annotations -->
+		<dependency>
+			<groupId>io.swagger.core.v3</groupId>
+			<artifactId>swagger-annotations</artifactId>
+			<version>2.2.10</version>
 		</dependency>
 
 		<!-- Starter do Spring Boot para testes, incluindo JUnit e Mockito -->

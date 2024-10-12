@@ -1,11 +1,10 @@
-/* CLASSE SERVICE */
-// A classe DigimonService é responsável por implementar a lógica de negócios da aplicação.
-// Ela é responsável por realizar a comunicação entre o controlador e o repositório. Ela contém métodos que realizam operações CRUD (criar, ler, atualizar e excluir) no banco de dados.
 package com.globalfinanceiro.digimon_api.service;
 
 import com.globalfinanceiro.digimon_api.model.Digimon;
 import com.globalfinanceiro.digimon_api.repository.DigimonRepository;
+import com.globalfinanceiro.digimon_api.dto.DigimonDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,7 +18,7 @@ public class DigimonService {
 
     // Retorna todos os Digimons
     public List<Digimon> getAllDigimons() {
-        return digimonRepository.findAll();
+        return digimonRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
     // Retorna Digimons pelo ID
@@ -29,25 +28,29 @@ public class DigimonService {
 
     // Retorna Digimons pelo nome
     public List<Digimon> getDigimonByName(String name) {
-        return digimonRepository.findByName(name);
+        return digimonRepository.findByNameContaining(name, Sort.by(Sort.Direction.ASC, "id"));
     }
 
     // Retorna Digimons pelo nível
     public List<Digimon> getDigimonByLevel(String level) {
-        return digimonRepository.findByLevel(level);
+        return digimonRepository.findByLevelContaining(level, Sort.by(Sort.Direction.ASC, "id"));
     }
 
     // Adiciona Digimons
-    public Digimon saveDigimon(Digimon digimon) {
+    public Digimon saveDigimon(DigimonDTO digimonCreationDTO) {
+        Digimon digimon = new Digimon();
+        digimon.setName(digimonCreationDTO.getName());
+        digimon.setImg(digimonCreationDTO.getImg());
+        digimon.setLevel(digimonCreationDTO.getLevel());
         return digimonRepository.save(digimon);
     }
 
     // Atualiza Digimons pelo ID
-    public Optional<Digimon> updateDigimon(Long id, Digimon updatedDigimon) {
+    public Optional<Digimon> updateDigimon(Long id, DigimonDTO digimonUpdateDTO) {
         return digimonRepository.findById(id).map(digimon -> {
-            digimon.setName(updatedDigimon.getName());
-            digimon.setImg(updatedDigimon.getImg());
-            digimon.setLevel(updatedDigimon.getLevel());
+            digimon.setName(digimonUpdateDTO.getName());
+            digimon.setImg(digimonUpdateDTO.getImg());
+            digimon.setLevel(digimonUpdateDTO.getLevel());
             return digimonRepository.save(digimon);
         });
     }
@@ -57,6 +60,3 @@ public class DigimonService {
         digimonRepository.deleteById(id);
     }
 }
-
-
-
