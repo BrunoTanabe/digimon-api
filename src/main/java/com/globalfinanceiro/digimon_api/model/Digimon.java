@@ -26,7 +26,6 @@ public class Digimon {
         this.level = level;
     }
 
-    // Getters e Setters
     public Long getId() {
         return id;
     }

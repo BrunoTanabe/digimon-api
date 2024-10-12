@@ -27,11 +27,9 @@ public class DatabaseInitializer implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) throws Exception {
-        // Verificar se a tabela "digimon" existe
         Boolean tableExists = checkIfTableExists();
 
         if (!tableExists) {
-            // Se a tabela não existir, cria a tabela e insere os dados do JSON
             createTable();
             loadDataFromJson();
         }
@@ -58,7 +56,6 @@ public class DatabaseInitializer implements CommandLineRunner {
     }
 
     private void loadDataFromJson() {
-        // Carrega os dados do arquivo JSON e insere no banco de dados
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             InputStream inputStream = new ClassPathResource("digimons_data.json").getInputStream();

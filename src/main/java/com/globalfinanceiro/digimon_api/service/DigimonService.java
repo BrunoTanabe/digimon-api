@@ -10,33 +10,28 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-@Service // Anotação que indica que a classe é um serviço.
+@Service
 public class DigimonService {
 
-    @Autowired // Anotação que injeta uma instância de DigimonRepository.
+    @Autowired
     private DigimonRepository digimonRepository;
 
-    // Retorna todos os Digimons
     public List<Digimon> getAllDigimons() {
         return digimonRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
-    // Retorna Digimons pelo ID
     public Optional<Digimon> getDigimonById(Long id) {
         return digimonRepository.findById(id);
     }
 
-    // Retorna Digimons pelo nome
     public List<Digimon> getDigimonByName(String name) {
         return digimonRepository.findByNameContaining(name, Sort.by(Sort.Direction.ASC, "id"));
     }
 
-    // Retorna Digimons pelo nível
     public List<Digimon> getDigimonByLevel(String level) {
         return digimonRepository.findByLevelContaining(level, Sort.by(Sort.Direction.ASC, "id"));
     }
 
-    // Adiciona Digimons
     public Digimon saveDigimon(DigimonDTO digimonCreationDTO) {
         Digimon digimon = new Digimon();
         digimon.setName(digimonCreationDTO.getName());
@@ -45,7 +40,6 @@ public class DigimonService {
         return digimonRepository.save(digimon);
     }
 
-    // Atualiza Digimons pelo ID
     public Optional<Digimon> updateDigimon(Long id, DigimonDTO digimonUpdateDTO) {
         return digimonRepository.findById(id).map(digimon -> {
             digimon.setName(digimonUpdateDTO.getName());
@@ -55,7 +49,6 @@ public class DigimonService {
         });
     }
 
-    // Deleta Digimons pelo ID
     public void deleteDigimon(Long id) {
         digimonRepository.deleteById(id);
     }
