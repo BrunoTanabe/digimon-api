@@ -8,26 +8,26 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * Repository interface for Digimon entities.
+ * Interface de repositório para entidades Digimon.
  */
 @Repository
 public interface DigimonRepository extends JpaRepository<Digimon, Long> {
 
     /**
-     * Finds Digimons containing the given name.
+     * Encontra Digimons que contêm o nome fornecido.
      *
-     * @param name the name to search for
-     * @param sort the sort order
-     * @return a list of matching Digimons
+     * @param name o nome a ser pesquisado
+     * @param sort a ordem de classificação
+     * @return uma lista de Digimons correspondentes
      */
     List<Digimon> findByNameContaining(String name, Sort sort);
 
     /**
-     * Finds Digimons containing the given level.
+     * Encontra Digimons que contêm o nível fornecido.
      *
-     * @param level the level to search for
-     * @param sort  the sort order
-     * @return a list of matching Digimons
+     * @param level o nível a ser pesquisado
+     * @param sort  a ordem de classificação
+     * @return uma lista de Digimons correspondentes
      */
     List<Digimon> findByLevelContaining(String level, Sort sort);
 }

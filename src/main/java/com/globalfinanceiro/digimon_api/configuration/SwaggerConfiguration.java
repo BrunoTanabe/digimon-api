@@ -6,14 +6,14 @@ import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 
 /**
- * Swagger configuration class for OpenAPI documentation.
- * Sets up basic metadata for the API documentation.
+ * Classe de configuração do Swagger para documentação OpenAPI.
+ * Configura metadados básicos para a documentação da API.
  */
 @Configuration
 @OpenAPIDefinition(info = @Info(
         title = "Digimon API",
         version = "0.1",
-        description = "API for querying Digimon for the GF Software Challenge!",
+        description = "API para consultar Digimons para o Desafio GF Software!",
         contact = @io.swagger.v3.oas.annotations.info.Contact(
                 name = "Bruno Tanabe",
                 email = "tanabebruno@gmail.com",
@@ -25,5 +25,5 @@ import io.swagger.v3.oas.annotations.info.Info;
         )
 ))
 public class SwaggerConfiguration {
-    // No implementation needed; configuration is handled via annotations.
+        // Nenhuma implementação necessária; a configuração é feita via anotações.
 }

@@ -18,8 +18,8 @@ import java.io.InputStream;
 import java.util.List;
 
 /**
- * Initializes the database on application startup.
- * Checks if the 'digimon' table exists and loads initial data from JSON file if needed.
+ * Inicializa o banco de dados ao iniciar a aplicação.
+ * Verifica se a tabela 'digimon' existe e carrega dados iniciais do arquivo JSON, se necessário.
  */
 @Component
 public class DatabaseInitializer implements CommandLineRunner {
@@ -28,10 +28,10 @@ public class DatabaseInitializer implements CommandLineRunner {
     private final DigimonRepository digimonRepository;
 
     /**
-     * Constructs a new DatabaseInitializer with the given JdbcTemplate and DigimonRepository.
+     * Constrói um novo DatabaseInitializer com o JdbcTemplate e o DigimonRepository fornecidos.
      *
-     * @param jdbcTemplate      the JdbcTemplate for database operations
-     * @param digimonRepository the Digimon repository
+     * @param jdbcTemplate      o JdbcTemplate para operações no banco de dados
+     * @param digimonRepository o repositório de Digimon
      */
     public DatabaseInitializer(JdbcTemplate jdbcTemplate, DigimonRepository digimonRepository) {
         this.jdbcTemplate = jdbcTemplate;
@@ -41,61 +41,74 @@ public class DatabaseInitializer implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) {
-        String message = AnsiOutput.toString(AnsiColor.BRIGHT_YELLOW, "Checking if the 'digimon' table already exists", AnsiColor.DEFAULT);
+        String message = AnsiOutput.toString(AnsiColor.BRIGHT_YELLOW, "Verificando se a tabela 'digimon' já existe", AnsiColor.DEFAULT);
         System.out.println(message);
         boolean tableExists = checkIfTableExists();
 
         if (!tableExists) {
-            message = AnsiOutput.toString(AnsiColor.BRIGHT_YELLOW, "The table does not exist yet", AnsiColor.DEFAULT);
+            message = AnsiOutput.toString(AnsiColor.BRIGHT_YELLOW, "A tabela ainda não existe", AnsiColor.DEFAULT);
             System.out.println(message);
             createTable();
-            message = AnsiOutput.toString(AnsiColor.BRIGHT_GREEN, AnsiStyle.BOLD, "Table created successfully!", AnsiColor.DEFAULT, AnsiStyle.NORMAL);
+            message = AnsiOutput.toString(AnsiColor.BRIGHT_GREEN, AnsiStyle.BOLD, "Tabela criada com sucesso!", AnsiColor.DEFAULT, AnsiStyle.NORMAL);
             System.out.println(message);
             loadDataFromJson();
-            message = AnsiOutput.toString(AnsiColor.BRIGHT_GREEN, AnsiStyle.BOLD, "Digimon data loaded successfully", AnsiColor.DEFAULT, AnsiStyle.NORMAL);
+            message = AnsiOutput.toString(AnsiColor.BRIGHT_GREEN, AnsiStyle.BOLD, "Dados de Digimon carregados com sucesso", AnsiColor.DEFAULT, AnsiStyle.NORMAL);
             System.out.println(message);
         } else {
-            message = AnsiOutput.toString(AnsiColor.BRIGHT_YELLOW, "Table already exists", AnsiColor.DEFAULT);
+            message = AnsiOutput.toString(AnsiColor.BRIGHT_YELLOW, "Tabela já existe", AnsiColor.DEFAULT);
             System.out.println(message);
-            message = AnsiOutput.toString(AnsiColor.BRIGHT_GREEN, AnsiStyle.BOLD, "Digimon data loaded successfully", AnsiColor.DEFAULT, AnsiStyle.NORMAL);
+            message = AnsiOutput.toString(AnsiColor.BRIGHT_GREEN, AnsiStyle.BOLD, "Dados de Digimon já estão carregados", AnsiColor.DEFAULT, AnsiStyle.NORMAL);
             System.out.println(message);
         }
     }
 
     /**
-     * Checks if the 'digimon' table exists in the database.
+     * Verifica se a tabela 'digimon' existe no banco de dados.
      *
-     * @return true if the table exists, false otherwise
+     * @return true se a tabela existe, false caso contrário
      */
     private boolean checkIfTableExists() {
-        String sql = "SELECT COUNT(*) FROM information_schema.tables WHERE table_name = 'digimon'";
-        Integer count = jdbcTemplate.queryForObject(sql, Integer.class);
-        return count != null && count > 0;
+        try {
+            String sql = "SELECT COUNT(*) FROM information_schema.tables WHERE table_name = 'digimon'";
+            Integer count = jdbcTemplate.queryForObject(sql, Integer.class);
+            return count != null && count > 0;
+        } catch (Exception e) {
+            System.err.println("Erro ao verificar se a tabela existe: " + e.getMessage());
+            throw e;
+        }
     }
 
     /**
-     * Creates the 'digimon' table in the database.
+     * Cria a tabela 'digimon' no banco de dados.
      */
     private void createTable() {
-        String createTableSql = "CREATE TABLE digimon (" +
-                "id SERIAL PRIMARY KEY," +
-                "name VARCHAR(255) NOT NULL," +
-                "img VARCHAR(255) NOT NULL," +
-                "level VARCHAR(255) NOT NULL)";
-        jdbcTemplate.execute(createTableSql);
+        try {
+            String createTableSql = "CREATE TABLE digimon (" +
+                    "id SERIAL PRIMARY KEY," +
+                    "name VARCHAR(255) NOT NULL," +
+                    "img VARCHAR(255) NOT NULL," +
+                    "level VARCHAR(255) NOT NULL)";
+            jdbcTemplate.execute(createTableSql);
+            System.out.println("Tabela 'digimon' criada com sucesso.");
+        } catch (Exception e) {
+            System.err.println("Erro ao criar a tabela 'digimon': " + e.getMessage());
+            throw e;
+        }
     }
 
     /**
-     * Loads initial Digimon data from JSON file into the database.
+     * Carrega dados iniciais de Digimon do arquivo JSON para o banco de dados.
      */
     private void loadDataFromJson() {
         ObjectMapper objectMapper = new ObjectMapper();
         try (InputStream inputStream = new ClassPathResource("digimons_data.json").getInputStream()) {
             List<Digimon> digimons = objectMapper.readValue(inputStream, new TypeReference<List<Digimon>>() {});
             digimonRepository.saveAll(digimons);
+            System.out.println("Dados de Digimons carregados e inseridos com sucesso.");
         } catch (IOException e) {
-            String errorMessage = AnsiOutput.toString(AnsiColor.RED, "Error loading data from JSON file: " + e.getMessage(), AnsiColor.DEFAULT);
+            String errorMessage = AnsiOutput.toString(AnsiColor.RED, "Erro ao carregar dados do arquivo JSON: " + e.getMessage(), AnsiColor.DEFAULT);
             System.err.println(errorMessage);
+            throw new RuntimeException(e);
         }
     }
 }

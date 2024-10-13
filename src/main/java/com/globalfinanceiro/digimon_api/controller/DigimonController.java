@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * REST controller for managing Digimons.
+ * Controlador REST para gerenciar Digimons.
  */
 @RestController
 @RequestMapping("/digimons")
@@ -21,100 +21,136 @@ public class DigimonController {
     private final DigimonService digimonService;
 
     /**
-     * Constructs a new DigimonController with the given DigimonService.
+     * Constrói um novo DigimonController com o DigimonService fornecido.
      *
-     * @param digimonService the Digimon service
+     * @param digimonService o serviço de Digimon
      */
     public DigimonController(DigimonService digimonService) {
         this.digimonService = digimonService;
     }
 
     /**
-     * Retrieves all Digimons.
+     * Recupera todos os Digimons.
      *
-     * @return a list of all Digimons
+     * @return uma lista de todos os Digimons
      */
     @GetMapping
-    @Operation(summary = "Get all Digimons", description = "Retrieve all Digimons from the database.", tags = "GET")
+    @Operation(summary = "Obter todos os Digimons", description = "Recupera todos os Digimons do banco de dados.", tags = "GET")
     public List<Digimon> getAllDigimons() {
-        return digimonService.getAllDigimons();
+        try {
+            return digimonService.getAllDigimons();
+        } catch (Exception e) {
+            System.err.println("Erro ao obter todos os Digimons: " + e.getMessage());
+            return List.of();
+        }
     }
 
     /**
-     * Retrieves a Digimon by its ID.
+     * Recupera um Digimon pelo seu ID.
      *
-     * @param id the ID of the Digimon
-     * @return the Digimon if found, or 404 Not Found
+     * @param id o ID do Digimon
+     * @return o Digimon se encontrado, ou 404 Not Found
      */
     @GetMapping("/id/{id}")
-    @Operation(summary = "Get Digimon by ID", description = "Retrieve a Digimon by its ID from the database.", tags = "GET")
+    @Operation(summary = "Obter Digimon por ID", description = "Recupera um Digimon pelo seu ID do banco de dados.", tags = "GET")
     public ResponseEntity<Digimon> getDigimonById(@PathVariable Long id) {
-        return digimonService.getDigimonById(id)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        try {
+            Optional<Digimon> digimon = digimonService.getDigimonById(id);
+            return digimon.map(ResponseEntity::ok)
+                    .orElseGet(() -> ResponseEntity.notFound().build());
+        } catch (Exception e) {
+            System.err.println("Erro ao obter Digimon por ID: " + e.getMessage());
+            return ResponseEntity.status(500).build();
+        }
     }
 
     /**
-     * Retrieves Digimons by their name.
+     * Recupera Digimons pelo seu nome.
      *
-     * @param name the name of the Digimon(s)
-     * @return a list of matching Digimons
+     * @param name o nome do(s) Digimon(s)
+     * @return uma lista de Digimons correspondentes
      */
     @GetMapping("/name/{name}")
-    @Operation(summary = "Get Digimon by name", description = "Retrieve Digimons by their name from the database.", tags = "GET")
+    @Operation(summary = "Obter Digimon por nome", description = "Recupera Digimons pelo seu nome do banco de dados.", tags = "GET")
     public List<Digimon> getDigimonByName(@PathVariable String name) {
-        return digimonService.getDigimonByName(name);
+        try {
+            return digimonService.getDigimonByName(name);
+        } catch (Exception e) {
+            System.err.println("Erro ao obter Digimon por nome: " + e.getMessage());
+            return List.of();
+        }
     }
 
     /**
-     * Retrieves Digimons by their level.
+     * Recupera Digimons pelo seu nível.
      *
-     * @param level the level of the Digimon(s)
-     * @return a list of matching Digimons
+     * @param level o nível do(s) Digimon(s)
+     * @return uma lista de Digimons correspondentes
      */
     @GetMapping("/level/{level}")
-    @Operation(summary = "Get Digimon by level", description = "Retrieve Digimons by their level from the database.", tags = "GET")
+    @Operation(summary = "Obter Digimon por nível", description = "Recupera Digimons pelo seu nível do banco de dados.", tags = "GET")
     public List<Digimon> getDigimonByLevel(@PathVariable String level) {
-        return digimonService.getDigimonByLevel(level);
+        try {
+            return digimonService.getDigimonByLevel(level);
+        } catch (Exception e) {
+            System.err.println("Erro ao obter Digimon por nível: " + e.getMessage());
+            return List.of();
+        }
     }
 
     /**
-     * Creates a new Digimon.
+     * Cria um novo Digimon.
      *
-     * @param digimonDto the Digimon data transfer object
-     * @return the created Digimon
+     * @param digimonDto o objeto de transferência de dados do Digimon
+     * @return o Digimon criado
      */
     @PostMapping
-    @Operation(summary = "Create a Digimon", description = "Create a new Digimon in the database.", tags = "POST")
-    public Digimon createDigimon(@RequestBody DigimonDTO digimonDto) {
-        return digimonService.saveDigimon(digimonDto);
+    @Operation(summary = "Criar um Digimon", description = "Cria um novo Digimon no banco de dados.", tags = "POST")
+    public ResponseEntity<Digimon> createDigimon(@RequestBody DigimonDTO digimonDto) {
+        try {
+            Digimon createdDigimon = digimonService.saveDigimon(digimonDto);
+            return ResponseEntity.ok(createdDigimon);
+        } catch (Exception e) {
+            System.err.println("Erro ao criar Digimon: " + e.getMessage());
+            return ResponseEntity.status(500).build();
+        }
     }
 
     /**
-     * Updates an existing Digimon by ID.
+     * Atualiza um Digimon existente por ID.
      *
-     * @param id         the ID of the Digimon to update
-     * @param digimonDto the updated Digimon data
-     * @return the updated Digimon if found, or 404 Not Found
+     * @param id         o ID do Digimon a ser atualizado
+     * @param digimonDto os dados atualizados do Digimon
+     * @return o Digimon atualizado se encontrado, ou 404 Not Found
      */
     @PutMapping("/{id}")
-    @Operation(summary = "Update a Digimon", description = "Update a Digimon by its ID in the database.", tags = "PUT")
+    @Operation(summary = "Atualizar um Digimon", description = "Atualiza um Digimon pelo seu ID no banco de dados.", tags = "PUT")
     public ResponseEntity<Digimon> updateDigimon(@PathVariable Long id, @RequestBody DigimonDTO digimonDto) {
-        Optional<Digimon> updatedDigimon = digimonService.updateDigimon(id, digimonDto);
-        return updatedDigimon.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        try {
+            Optional<Digimon> updatedDigimon = digimonService.updateDigimon(id, digimonDto);
+            return updatedDigimon.map(ResponseEntity::ok)
+                    .orElseGet(() -> ResponseEntity.notFound().build());
+        } catch (Exception e) {
+            System.err.println("Erro ao atualizar Digimon: " + e.getMessage());
+            return ResponseEntity.status(500).build();
+        }
     }
 
     /**
-     * Deletes a Digimon by ID.
+     * Deleta um Digimon pelo ID.
      *
-     * @param id the ID of the Digimon to delete
-     * @return 204 No Content if deletion was successful
+     * @param id o ID do Digimon a ser deletado
+     * @return 204 No Content se a deleção foi bem-sucedida
      */
     @DeleteMapping("/{id}")
-    @Operation(summary = "Delete a Digimon", description = "Delete a Digimon by its ID from the database.", tags = "DELETE")
+    @Operation(summary = "Deletar um Digimon", description = "Deleta um Digimon pelo seu ID do banco de dados.", tags = "DELETE")
     public ResponseEntity<Void> deleteDigimon(@PathVariable Long id) {
-        digimonService.deleteDigimon(id);
-        return ResponseEntity.noContent().build();
+        try {
+            digimonService.deleteDigimon(id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            System.err.println("Erro ao deletar Digimon: " + e.getMessage());
+            return ResponseEntity.status(500).build();
+        }
     }
 }

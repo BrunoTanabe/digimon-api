@@ -1,24 +1,24 @@
-# Stage 1: Build the project
+# Etapa 1: Construir o projeto
 FROM maven:3.9.2-eclipse-temurin-17 AS build
 WORKDIR /app
 
-# Copy the pom.xml and download dependencies
+# Copiar o pom.xml e baixar as dependências
 COPY pom.xml .
 RUN mvn dependency:go-offline
 
-# Copy the source code and build the JAR
+# Copiar o código-fonte e construir o JAR
 COPY src ./src
 RUN mvn clean package -DskipTests
 
-# Stage 2: Create the image to run the application
+# Etapa 2: Criar a imagem para executar a aplicação
 FROM eclipse-temurin:17-jdk-alpine
 WORKDIR /app
 
-# Copy the JAR from the build stage
+# Copiar o JAR da etapa de build
 COPY --from=build /app/target/digimon-api-0.0.1-SNAPSHOT.jar /app/digimon-api.jar
 
-# Expose the application port
+# Expor a porta da aplicação
 EXPOSE 5431
 
-# Command to run the application
+# Comando para executar a aplicação
 ENTRYPOINT ["java", "-jar", "digimon-api.jar"]
