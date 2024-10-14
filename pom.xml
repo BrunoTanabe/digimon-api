@@ -16,79 +16,76 @@
 	<version>0.0.1-SNAPSHOT</version>
 
 	<name>digimon-api</name>
-	<description>This project is a REST API developed in Java using Spring Boot, designed to provide information about Digimons from its own database. The API supports search operations by name, level, and full listing. The project includes Swagger documentation, unit tests, and is containerized with Docker.</description>
-
-	<licenses>
-		<license/>
-	</licenses>
-
-	<developers>
-		<developer/>
-	</developers>
-
-	<scm>
-		<connection/>
-		<developerConnection/>
-		<tag/>
-		<url/>
-	</scm>
+	<description>Este projeto é uma API REST desenvolvida em Java usando Spring Boot, projetada para fornecer informações sobre Digimons de seu próprio banco de dados. A API suporta operações de pesquisa por nome, nível e listagem completa. O projeto inclui documentação Swagger, testes unitários e está containerizado com Docker.</description>
 
 	<properties>
 		<java.version>17</java.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
 
 	<dependencies>
+		<!-- Jackson Databind para processamento de JSON -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
 		</dependency>
 
+		<!-- Spring Boot Starter para construir aplicações web -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
+		<!-- Spring Boot Starter Data JPA para acesso ao banco de dados -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 
+		<!-- Driver JDBC do PostgreSQL -->
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
 		</dependency>
 
+		<!-- Lombok para reduzir código boilerplate -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<scope>provided</scope>
 		</dependency>
 
+		<!-- API de Persistência Jakarta -->
 		<dependency>
 			<groupId>jakarta.persistence</groupId>
 			<artifactId>jakarta.persistence-api</artifactId>
 			<version>3.1.0</version>
 		</dependency>
 
+		<!-- API de Transação Jakarta -->
 		<dependency>
 			<groupId>jakarta.transaction</groupId>
 			<artifactId>jakarta.transaction-api</artifactId>
 			<version>2.0.1</version>
 		</dependency>
 
+		<!-- SpringDoc OpenAPI para Swagger UI -->
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>2.6.0</version>
 		</dependency>
 
+		<!-- Anotações do Swagger -->
 		<dependency>
 			<groupId>io.swagger.core.v3</groupId>
 			<artifactId>swagger-annotations</artifactId>
 			<version>2.2.10</version>
 		</dependency>
 
+		<!-- Spring Boot Starter Test para testes -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -97,7 +94,35 @@
 	</dependencies>
 
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*</include>
+				</includes>
+				<excludes>
+					<exclude>application.properties</exclude>
+				</excludes>
+				<filtering>true</filtering>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>application.properties</include>
+				</includes>
+				<filtering>false</filtering>
+			</resource>
+		</resources>
 		<plugins>
+			<!-- Plugin Maven para compilar o projeto -->
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.3.1</version>
+				<configuration>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<!-- Plugin Maven do Spring Boot -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>

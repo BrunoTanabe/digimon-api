@@ -1,12 +1,17 @@
 package com.globalfinanceiro.digimon_api.dto;
 
-import lombok.Data;
+// import lombok.Data;
 
+/**
+ * Objeto de Transferência de Dados (DTO) para Digimon.
+ */
+// @Data
 public class DigimonDTO {
     private String name;
     private String img;
     private String level;
 
+    // A anotação @Data do Lombok gera getters, setters, equals, hashCode, and toString methods, mas o Docker não funciona corretamente com a anotação @Data.
     // Getters e Setters
     public String getName() {
         return name;
@@ -32,4 +37,5 @@ public class DigimonDTO {
         this.level = level;
     }
 }
+
 

@@ -20,6 +20,13 @@ public class Digimon {
 
     public Digimon() {}
 
+    /**
+     * Constrói um novo Digimon com os atributos fornecidos.
+     *
+     * @param name  o nome do Digimon
+     * @param img   a URL da imagem do Digimon
+     * @param level o nível do Digimon
+     */
     public Digimon(String name, String img, String level) {
         this.name = name;
         this.img = img;

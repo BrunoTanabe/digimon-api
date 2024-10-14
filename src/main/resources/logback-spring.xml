@@ -1,0 +1,14 @@
+<configuration>
+    <!-- Configuração do appender de console -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!-- Padrão de log com data, nível, thread, logger e mensagem -->
+            <pattern>%d{dd-MM-yyyy HH:mm:ss.SSS} %highlight(%-5level) [%blue(%t)] %green(%logger{45}): %msg%n%throwable</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Configuração do logger root -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+    </root>
+</configuration>

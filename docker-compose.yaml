@@ -8,9 +8,9 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: digimonapi
     ports:
-      - "5432:5432"
+      - "5432:5432"  # Expor PostgreSQL na porta 5432
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data  # Persistir dados do banco de dados
     networks:
       - digimon-network
 
@@ -22,7 +22,7 @@ services:
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
     ports:
-      - "5431:5431"
+      - "5431:5431"  # Expor aplicação Spring Boot na porta 5431
     depends_on:
       - postgres
     networks:
