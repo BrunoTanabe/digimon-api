@@ -1,5 +1,3 @@
-Aqui está a tradução do arquivo README.md para inglês, com pequenas melhorias para facilitar o entendimento e manter a clareza do conteúdo:
-
 # Digimon API 🐉
 Explore the digital world of Digimons through our RESTful API! 🚀 With **Digimon API**, you can easily and quickly query, add, update, and delete information about your favorite Digimons. Developed in Java with Spring Boot, this API offers well-defined endpoints, interactive documentation with Swagger, and is ready to run in any environment thanks to Docker containerization. Dive into this tech adventure and connect to the Digimon universe! 🌐
 
